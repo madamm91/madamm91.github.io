@@ -1,0 +1,205 @@
+/* Palette: Orca "Ghostty Default Style Dark" – the same colours as Adam's terminal. */
+:root {
+  --bg: #282c34;
+  --page: #1e2127;
+  --bar: #1f2228;
+  --fg: #ffffff;
+  --black: #1d1f21;
+  --red: #cc6666;
+  --green: #b5bd68;
+  --yellow: #f0c674;
+  --blue: #81a2be;
+  --magenta: #b294bb;
+  --cyan: #8abeb7;
+  --white: #c5c8c6;
+  --dim: #7c7f86;
+  --font: "SF Mono", ui-monospace, Menlo, "JetBrains Mono", Consolas, monospace;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--page);
+  color: var(--fg);
+  font: 500 14px/1.55 var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+h1, p, dl, dd, pre { margin: 0; }
+b { font-weight: 700; }
+a { color: inherit; }
+::selection { background: #5a7898; color: #fff; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+html:not(.js) .js-only { display: none !important; }
+
+/* ── window ─────────────────────────────────────────────── */
+.term {
+  max-width: 980px;
+  margin: 40px auto;
+  background: var(--bg);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 24px 60px rgba(0,0,0,.45);
+  min-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+}
+.bar {
+  background: var(--bar);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+.dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.dot.red { background: #ff5f57; } .dot.amber { background: #febc2e; } .dot.green { background: #28c840; }
+.title { color: var(--dim); margin-left: 10px; font-size: 12.5px; }
+.body { padding: 18px 22px 28px; flex: 1; cursor: text; }
+
+/* ── agnoster prompt ────────────────────────────────────── */
+.prompt { display: flex; align-items: stretch; flex-wrap: wrap; row-gap: 4px; margin-top: 20px; }
+.screen > :first-child .block:first-child .prompt,
+.screen > .block:first-child .prompt { margin-top: 0; }
+.seg { position: relative; padding: 0 8px 0 12px; color: var(--black); white-space: nowrap; }
+.seg::after {
+  content: ""; position: absolute; right: -10px; top: 0; bottom: 0; width: 10px;
+  background: inherit; clip-path: polygon(0 0, 100% 50%, 0 100%); z-index: 1;
+}
+.seg + .seg { padding-left: 16px; }
+.ctx { background: var(--black); color: var(--fg); padding-left: 8px; }
+.dir { background: var(--blue); }
+.git { background: var(--green); }
+.cmd { padding-left: 18px; color: var(--fg); white-space: pre-wrap; word-break: break-word; }
+.cancel { color: var(--dim); }
+
+/* ── output ─────────────────────────────────────────────── */
+.out { margin-top: 6px; color: var(--white); max-width: 86ch; }
+.out > * + * { margin-top: 4px; }
+.out.wide { max-width: none; }
+.name { font-size: 28px; font-weight: 700; color: var(--fg); line-height: 1.2; margin: 4px 0 2px; }
+.name b { color: var(--yellow); }
+.c { color: var(--dim); }
+.k { color: var(--blue); } .g { color: var(--green); } .y { color: var(--yellow); }
+.m { color: var(--magenta); } .cy { color: var(--cyan); } .r { color: var(--red); } .w { color: var(--fg); }
+.stats { display: flex; flex-wrap: wrap; gap: 4px 26px; }
+.stats b { color: var(--yellow); }
+.ls { display: grid; grid-template-columns: 150px 1fr; gap: 3px 16px; }
+.ls dt { white-space: nowrap; }
+.stack dt { font-weight: 500; }
+.lnk { color: var(--cyan); text-decoration: underline; text-underline-offset: 3px; }
+.lnk:hover { color: var(--fg); }
+pre.block-pre, .out pre { font: inherit; white-space: pre; overflow-x: auto; }
+.err { color: var(--red); }
+
+/* clickable commands (help list, ls entries, hints) */
+[data-cmd].is-cmd, .cmdlink { cursor: pointer; border-radius: 2px; }
+[data-cmd].is-cmd:hover, .cmdlink:hover { text-decoration: underline; text-underline-offset: 3px; }
+.cmdlink { color: var(--yellow); }
+[data-cmd].is-cmd:focus-visible, .cmdlink:focus-visible, .lnk:focus-visible, .chips button:focus-visible {
+  outline: 2px solid var(--yellow); outline-offset: 2px;
+}
+
+/* help table */
+.help { display: grid; grid-template-columns: max-content 1fr; gap: 2px 22px; }
+.help dt { color: var(--yellow); }
+
+/* git log */
+.log .hash { color: var(--yellow); }
+.log .ref { color: var(--cyan); }
+.log .ref b { color: var(--green); }
+.log .when { color: var(--dim); }
+.log li { list-style: none; display: grid; grid-template-columns: max-content 1fr; gap: 0 12px; }
+.log { padding: 0; margin: 0; }
+.log li + li { margin-top: 4px; }
+.log .msg { color: var(--fg); }
+.log .sub { color: var(--white); grid-column: 2; }
+
+/* awards */
+.awards { display: grid; grid-template-columns: max-content 1fr; gap: 3px 16px; }
+.awards dt { color: var(--yellow); white-space: nowrap; }
+
+/* neofetch */
+.neofetch { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; }
+.neofetch .portrait { color: var(--white); line-height: 1.12; font-size: 12px; }
+.neofetch .info .w { font-weight: 700; }
+.neofetch .info dl { display: grid; grid-template-columns: max-content 1fr; gap: 1px 12px; }
+.neofetch .info dt { color: var(--blue); font-weight: 700; }
+.swatches { display: flex; margin-top: 10px; }
+.swatches i { width: 22px; height: 14px; display: block; }
+
+/* simulation */
+.sim pre { line-height: 1.2; }
+.sim .agent { color: var(--cyan); }
+.sim .free { color: var(--green); }
+.sim .busy { color: var(--yellow); }
+.sim .wall { color: var(--dim); }
+
+/* ── live prompt with block cursor ──────────────────────── */
+.input-wrap { position: relative; flex: 1 1 12ch; min-width: 12ch; display: block; cursor: text; }
+.input-wrap input {
+  position: absolute; inset: 0; width: 100%;
+  padding: 0 0 0 18px; margin: 0; border: 0; outline: 0;
+  background: transparent; color: transparent; caret-color: transparent;
+  font: inherit;
+  opacity: 0.01;
+}
+.mirror { white-space: pre; color: var(--fg); }
+.cursor {
+  display: inline-block; min-width: 1ch; background: var(--fg); color: var(--bg);
+  animation: blink 1.1s steps(1) infinite;
+}
+.input-wrap:not(.focused) .cursor { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 1px var(--fg); animation: none; }
+.busy .input-wrap .cursor { animation: none; opacity: .35; }
+@keyframes blink { 50% { background: transparent; color: var(--fg); } }
+
+/* ── intro: type the first command, then reveal the session ── */
+.intro .session .block:first-child .out,
+.intro .session .block:not(:first-child) { visibility: hidden; }
+.intro .live { visibility: hidden; }
+.revealing { animation: reveal .18s ease-out; }
+@keyframes reveal { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+
+/* ── mobile chips ───────────────────────────────────────── */
+.chips { display: none; }
+@media (max-width: 720px), (pointer: coarse) {
+  .chips {
+    display: flex; gap: 8px; overflow-x: auto; position: sticky; bottom: 0; z-index: 5;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(30,33,39,.94); backdrop-filter: blur(6px);
+    border-top: 1px solid rgba(255,255,255,.08);
+    scrollbar-width: none;
+  }
+  .chips::-webkit-scrollbar { display: none; }
+  .live { scroll-margin-bottom: 76px; } /* keep the prompt above the sticky chips */
+  .chips button {
+    flex: none; font: inherit; font-size: 13px; color: var(--black); background: var(--blue);
+    border: 0; border-radius: 6px; padding: 7px 12px; cursor: pointer;
+  }
+  .chips button:nth-child(3n+2) { background: var(--green); }
+  .chips button:nth-child(3n) { background: var(--yellow); }
+}
+
+@media (max-width: 720px) {
+  body { font-size: 13px; }
+  .term { margin: 0; border-radius: 0; min-height: calc(100vh - 56px); box-shadow: none; }
+  .body { padding: 14px 16px 22px; }
+  .name { font-size: 22px; }
+  .ls, .awards, .help { grid-template-columns: 1fr; gap: 0; }
+  .ls dt:not(:first-child), .awards dt:not(:first-child), .help dt:not(:first-child) { margin-top: 6px; }
+  .log li { grid-template-columns: 1fr; }
+  .log .sub { grid-column: 1; }
+  .neofetch .portrait { font-size: 9.5px; }
+  .input-wrap input { font-size: 16px; } /* stops iOS zooming; the mirror draws the text */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor { animation: none; }
+  .revealing { animation: none; }
+}
