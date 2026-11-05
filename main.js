@@ -3,6 +3,7 @@
   'use strict';
 
   const LINKEDIN = 'https://www.linkedin.com/in/adammokcsay/';
+  const MAIL = 'adam.mokcsay@gmail.com';
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const coarse = window.matchMedia('(pointer: coarse)').matches;
 
@@ -172,6 +173,7 @@
     ['awards', 'competition results'],
     ['neofetch', 'system info, human edition'],
     ['simulate', 'run a tiny agent-based simulation'],
+    ['contact', 'how to reach me'],
     ['linkedin', 'open my LinkedIn profile'],
     ['sudo hire-me', 'you know you want to'],
     ['clear', 'clear the screen'],
@@ -203,7 +205,7 @@
   ];
 
   const COMMANDS = ['help', 'whoami', 'about', 'ls', 'cat', 'stack', 'git log', 'awards', 'neofetch',
-    'simulate', 'linkedin', 'sudo hire-me', 'clear', 'cd', 'pwd', 'history', 'echo', 'date', 'exit'];
+    'simulate', 'contact', 'mail', 'linkedin', 'sudo hire-me', 'clear', 'cd', 'pwd', 'history', 'echo', 'date', 'exit'];
 
   /* ── rendering helpers ────────────────────────────────── */
 
@@ -468,6 +470,11 @@
         if (/^log\b/.test(arg)) html = out.gitlog();
         else if (arg === 'status') html = `<p>On branch main</p><p>nothing to commit, working tree clean</p>`;
         else html = `<p>try ${cmdLink('git log')}</p>`;
+        break;
+      case 'contact':
+      case 'mail':
+        html = `<p><span class="k">mail</span>      <a class="lnk" href="mailto:${MAIL}">${MAIL}</a></p>` +
+          `<p><span class="k">linkedin</span>  <a class="lnk" href="${LINKEDIN}" target="_blank" rel="noopener">linkedin.com/in/adammokcsay</a></p>`;
         break;
       case 'linkedin': {
         const opened = openLinkedIn();
